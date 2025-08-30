@@ -1,0 +1,6 @@
+@billgenixselfcare_api.API_HostAddress = http://localhost:5195
+
+GET {{billgenixselfcare_api.API_HostAddress}}/departments/
+Accept: application/json
+
+###
