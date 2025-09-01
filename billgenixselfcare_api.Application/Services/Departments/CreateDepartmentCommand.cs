@@ -27,15 +27,15 @@ namespace billgenixselfcare_api.Application.Services.Departments
         {
             try
             {
-                var product = new Department
+                var department = new Department
                 {
                     Name = request.Name
                 };
 
-                await _repository.AddAsync(product);
-                var productDto = _mapper.Map<DepartmentDto>(product);
+                await _repository.AddAsync(department);
+                var departmentDto = _mapper.Map<DepartmentDto>(department);
 
-                return Result<DepartmentDto>.SuccessResult(productDto, "Created successfully");
+                return Result<DepartmentDto>.SuccessResult(departmentDto, "Created successfully");
             }
             catch (Exception ex)
             {

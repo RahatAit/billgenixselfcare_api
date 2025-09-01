@@ -12,6 +12,23 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Authorization Policies
+builder.Services.AddAuthorizationBuilder()
+    // Policy for User
+    .AddPolicy("User.View", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.View") ||
+        context.User.IsInRole("Super Admin")
+    ))
+    .AddPolicy("User.Create", policy => policy.RequireAssertion(context =>
+        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Create") ||
+        context.User.IsInRole("Super Admin")
+    ))
+    // Policy for Menu
+    .AddPolicy("Menu.View", policy => policy.RequireClaim("Permission", "Menu.View"))
+    .AddPolicy("Menu.Create", policy => policy.RequireClaim("Permission", "Menu.Create"))
+    .AddPolicy("Menu.Update", policy => policy.RequireClaim("Permission", "Menu.Update"))
+    .AddPolicy("Menu.Delete", policy => policy.RequireClaim("Permission", "Menu.Delete"));
+
 // CORS
 builder.Services.AddCors(options =>
 {
