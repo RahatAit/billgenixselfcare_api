@@ -26,7 +26,7 @@ namespace billgenixselfcare_api.Application.Services.Menus
         {
             try
             {
-                var data = await _repository.FindAsync(p => p.IsActive);
+                var data = await _repository.FindAsync(p => p.IsDeleted==false);
                 var dto = _mapper.Map<List<MenuDto>>(data);
 
                 return Result<List<MenuDto>>.SuccessResult(dto);

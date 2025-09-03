@@ -39,5 +39,26 @@ namespace billgenixselfcare_api.API.Controllers
                 return CreatedAtAction(nameof(GetAll), result);
             return BadRequest(result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateUserCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("ID mismatch");
+
+            var result = await _mediator.Send(command);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _mediator.Send(new DeleteUserCommand { Id = id, UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }

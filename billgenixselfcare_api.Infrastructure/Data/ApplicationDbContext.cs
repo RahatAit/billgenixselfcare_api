@@ -23,6 +23,14 @@ namespace billgenixselfcare_api.Infrastructure.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
             });
+
+            builder.Entity<Menu>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Path).IsRequired().HasMaxLength(200);
+            });
         }
     }
 }
