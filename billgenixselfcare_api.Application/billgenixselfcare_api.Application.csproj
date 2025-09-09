@@ -16,4 +16,8 @@
     <ProjectReference Include="..\billgenixselfcare_api.Domain\billgenixselfcare_api.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+  </ItemGroup>
+
 </Project>

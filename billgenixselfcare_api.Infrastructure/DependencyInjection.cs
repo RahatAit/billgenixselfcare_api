@@ -2,8 +2,10 @@
 using billgenixselfcare_api.Domain.Entities;
 using billgenixselfcare_api.Infrastructure.Data;
 using billgenixselfcare_api.Infrastructure.Repositories;
+using billgenixselfcare_api.Infrastructure.Requirements;
 using billgenixselfcare_api.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -55,6 +57,15 @@ namespace billgenixselfcare_api.Infrastructure
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? ""))
                 };
             });
+
+            // Authorization Policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DynamicPermission", policy =>
+                    policy.Requirements.Add(new DynamicPermissionRequirement()));
+            });
+            services.AddSingleton<IAuthorizationHandler, DynamicPermissionHandler>();
+            services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
 
             // Repository Pattern
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

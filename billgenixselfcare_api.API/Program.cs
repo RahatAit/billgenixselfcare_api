@@ -1,4 +1,6 @@
+using billgenixselfcare_api.API.Services;
 using billgenixselfcare_api.Application;
+using billgenixselfcare_api.Application.Interfaces;
 using billgenixselfcare_api.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,29 +15,36 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Authorization Policies
-builder.Services.AddAuthorizationBuilder()
-    // Policy for User
-    .AddPolicy("User.View", policy => policy.RequireAssertion(context =>
-        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.View") ||
-        context.User.IsInRole("Super Admin")
-    ))
-    .AddPolicy("User.Create", policy => policy.RequireAssertion(context =>
-        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Create") ||
-        context.User.IsInRole("Super Admin")
-    ))
-    .AddPolicy("User.Update", policy => policy.RequireAssertion(context =>
-        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Update") ||
-        context.User.IsInRole("Super Admin")
-    ))
-    .AddPolicy("User.Delete", policy => policy.RequireAssertion(context =>
-        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Delete") ||
-        context.User.IsInRole("Super Admin")
-    ))
-    // Policy for Menu
-    .AddPolicy("Menu.View", policy => policy.RequireClaim("Permission", "Menu.View"))
-    .AddPolicy("Menu.Create", policy => policy.RequireClaim("Permission", "Menu.Create"))
-    .AddPolicy("Menu.Update", policy => policy.RequireClaim("Permission", "Menu.Update"))
-    .AddPolicy("Menu.Delete", policy => policy.RequireClaim("Permission", "Menu.Delete"));
+//builder.Services.AddAuthorizationBuilder()
+//    // Policy for User
+//    .AddPolicy("User.View", policy => policy.RequireAssertion(context =>
+//        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.View") ||
+//        context.User.IsInRole("Super Admin")
+//    ))
+//    .AddPolicy("User.Create", policy => policy.RequireAssertion(context =>
+//        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Create") ||
+//        context.User.IsInRole("Super Admin")
+//    ))
+//    .AddPolicy("User.Update", policy => policy.RequireAssertion(context =>
+//        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Update") ||
+//        context.User.IsInRole("Super Admin")
+//    ))
+//    .AddPolicy("User.Delete", policy => policy.RequireAssertion(context =>
+//        context.User.HasClaim(claim => claim.Type == "Permission" && claim.Value == "User.Delete") ||
+//        context.User.IsInRole("Super Admin")
+//    ))
+//    // Policy for Menu
+//    .AddPolicy("Menu.View", policy => policy.RequireClaim("Permission", "Menu.View"))
+//    .AddPolicy("Menu.Create", policy => policy.RequireClaim("Permission", "Menu.Create"))
+//    .AddPolicy("Menu.Update", policy => policy.RequireClaim("Permission", "Menu.Update"))
+//    .AddPolicy("Menu.Delete", policy => policy.RequireClaim("Permission", "Menu.Delete"));
+
+// Authorize Policy Services
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddHttpContextAccessor();
+
+// Register the hosted service
+builder.Services.AddHostedService<PermissionSyncHostedService>();
 
 // CORS
 builder.Services.AddCors(options =>

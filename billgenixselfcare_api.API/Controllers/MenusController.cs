@@ -1,4 +1,5 @@
-﻿using billgenixselfcare_api.Application.Services.Menus;
+﻿using billgenixselfcare_api.API.CustomAttribute;
+using billgenixselfcare_api.Application.Services.Menus;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace billgenixselfcare_api.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "Menu.View")]
+        [RequireDynamicPermission]
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllMenusQuery());

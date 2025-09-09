@@ -13,6 +13,7 @@ namespace billgenixselfcare_api.Infrastructure.Data
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -7,6 +7,7 @@ namespace billgenixselfcare_api.Application.Interfaces
     {
         DbSet<Department> Departments { get; set; }
         DbSet<Menu> Menus { get; set; }
+        DbSet<Permission> Permissions { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
