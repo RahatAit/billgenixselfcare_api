@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using billgenixselfcare_api.Application.DTOs;
 using billgenixselfcare_api.Application.DTOs.Department;
 using billgenixselfcare_api.Application.DTOs.Menu;
 using billgenixselfcare_api.Domain.Entities;
@@ -9,6 +10,7 @@ namespace billgenixselfcare_api.Application.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<Permission, PermissionDto>();
             CreateMap<Department, DepartmentDto>();
             CreateMap<CreateDepartmentDto, Department>();
             CreateMap<UpdateDepartmentDto, Department>();

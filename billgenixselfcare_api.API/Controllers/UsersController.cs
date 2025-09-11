@@ -1,4 +1,4 @@
-﻿using billgenixselfcare_api.Application.Services.Users;
+﻿using billgenixselfcare_api.Application.Features.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

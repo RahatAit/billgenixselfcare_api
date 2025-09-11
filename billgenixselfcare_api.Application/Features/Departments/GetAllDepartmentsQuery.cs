@@ -5,7 +5,7 @@ using billgenixselfcare_api.Domain.Common;
 using billgenixselfcare_api.Domain.Entities;
 using MediatR;
 
-namespace billgenixselfcare_api.Application.Services.Departments
+namespace billgenixselfcare_api.Application.Features.Departments
 {
     public class GetAllDepartmentsQuery : IRequest<Result<List<DepartmentDto>>>
     {

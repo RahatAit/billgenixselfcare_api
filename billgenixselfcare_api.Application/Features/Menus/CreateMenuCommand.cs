@@ -5,7 +5,7 @@ using billgenixselfcare_api.Domain.Common;
 using billgenixselfcare_api.Domain.Entities;
 using MediatR;
 
-namespace billgenixselfcare_api.Application.Services.Menus
+namespace billgenixselfcare_api.Application.Features.Menus
 {
     public class CreateMenuCommand : IRequest<Result<MenuDto>>
     {

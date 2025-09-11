@@ -1,30 +1,30 @@
-﻿using billgenixselfcare_api.Domain.Common;
+﻿using billgenixselfcare_api.Application.Interfaces;
+using billgenixselfcare_api.Domain.Common;
 using billgenixselfcare_api.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
-namespace billgenixselfcare_api.Application.Services.Users
+namespace billgenixselfcare_api.Application.Features.Menus
 {
-    public class DeleteUserCommand : IRequest<Result>
+    public class DeleteMenuCommand : IRequest<Result>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
     }
 
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result>
+    public class DeleteMenuCommandHandler : IRequestHandler<DeleteMenuCommand, Result>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository<Menu> _repository;
 
-        public DeleteUserCommandHandler(UserManager<ApplicationUser> userManager)
+        public DeleteMenuCommandHandler(IRepository<Menu> repository)
         {
-            _userManager = userManager;
+            _repository = repository;
         }
 
-        public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteMenuCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var data = await _userManager.FindByIdAsync(request.Id);
+                var data = await _repository.GetByIdAsync(request.Id);
                 if (data == null)
                 {
                     return Result.FailureResult("Not found");
@@ -34,7 +34,7 @@ namespace billgenixselfcare_api.Application.Services.Users
                 data.IsDeleted = true;
                 data.DeletedBy = request.UserId;
                 data.DateledAt = DateTime.UtcNow;
-                await _userManager.UpdateAsync(data);
+                await _repository.UpdateAsync(data);
 
                 return Result.SuccessResult("Deleted successfully");
             }

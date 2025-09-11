@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace billgenixselfcare_api.Application.Services.Users
+namespace billgenixselfcare_api.Application.Features.Users
 {
     public class GetAllUsersQuery : IRequest<Result<List<UserDto>>>
     {

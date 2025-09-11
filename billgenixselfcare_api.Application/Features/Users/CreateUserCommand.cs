@@ -4,7 +4,7 @@ using billgenixselfcare_api.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace billgenixselfcare_api.Application.Services.Users
+namespace billgenixselfcare_api.Application.Features.Users
 {
     public class CreateUserCommand : IRequest<Result<UserDto>>
     {
