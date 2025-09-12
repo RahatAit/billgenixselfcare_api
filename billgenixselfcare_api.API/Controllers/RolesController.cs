@@ -17,16 +17,16 @@ namespace billgenixselfcare_api.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? search, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> GetAll(string? search, int? pageNumber, int? pageSize = 2)
         {
             var result = await _mediator.Send(new GetAllRolesQuery
             {
                 Search = search,
                 PageNumber = pageNumber,
-                PageSize = pageSize ?? 2
+                PageSize = pageSize
             });
             if (result.Success)
-                return Ok(new { result, pageIndex = result.Data.PageIndex, totalPages = result.Data.TotalPages });
+                return Ok(result);
             return BadRequest(result);
         }
 

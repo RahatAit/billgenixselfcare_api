@@ -9,7 +9,7 @@ namespace billgenixselfcare_api.Application.Features.Roles
     {
         public string Search { get; set; }
         public int? PageNumber { get; set; }
-        public int PageSize { get; set; }
+        public int? PageSize { get; set; }
     }
 
     public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Result<PaginatedList<RoleDto>>>
@@ -28,10 +28,10 @@ namespace billgenixselfcare_api.Application.Features.Roles
                 var query = _roleManager.Roles.AsQueryable();
                 if (!string.IsNullOrWhiteSpace(request.Search)) { query = query.Where(r => r.Name.Contains(request.Search)); }
 
-                var paginatedList = await PaginatedList<IdentityRole>.CreateAsync(query, request.PageNumber ?? 1, request.PageSize);
+                var paginatedList = await PaginatedList<IdentityRole>.CreateAsync(query, request.PageNumber ?? 1, request.PageSize ?? 10);
                 var dto = new List<RoleDto>();
 
-                foreach (var item in paginatedList)
+                foreach (var item in paginatedList.Items)
                 {
                     var claims = await _roleManager.GetClaimsAsync(item);
                     dto.Add(new RoleDto
@@ -41,7 +41,7 @@ namespace billgenixselfcare_api.Application.Features.Roles
                         Permissions = claims.Select(r => r.Value).ToList()
                     });
                 }
-                var data = new PaginatedList<RoleDto>(dto, paginatedList.Count, paginatedList.PageIndex, request.PageSize);
+                var data = new PaginatedList<RoleDto>(dto, paginatedList.TotalCount, paginatedList.PageIndex, paginatedList.PageSize);
                 return Result<PaginatedList<RoleDto>>.SuccessResult(data);
             }
             catch (Exception ex)
