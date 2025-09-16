@@ -10,7 +10,6 @@ namespace billgenixselfcare_api.Domain.Entities
         public Gender? Gender { get; set; }
         public string Address { get; set; }
         public string Image { get; set; }
-        public bool IsActive { get; set; } = true;
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string UpdatedBy { get; set; }

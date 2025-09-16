@@ -74,6 +74,7 @@ namespace billgenixselfcare_api.Infrastructure
 
             // Repository Pattern
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Services
             services.AddScoped<IAuthService, AuthService>();

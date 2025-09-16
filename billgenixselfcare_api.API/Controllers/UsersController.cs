@@ -1,6 +1,6 @@
-﻿using billgenixselfcare_api.Application.Features.Users;
+﻿using billgenixselfcare_api.Application.Features.Roles;
+using billgenixselfcare_api.Application.Features.Users;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,7 +8,7 @@ namespace billgenixselfcare_api.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,20 +19,32 @@ namespace billgenixselfcare_api.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "User.View")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? search, int? pageNumber, int? pageSize)
         {
-            var result = await _mediator.Send(new GetAllUsersQuery());
+            var result = await _mediator.Send(new GetAllUsersQuery
+            {
+                Search = search,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            });
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var result = await _mediator.Send(new GetUserByIdQuery { Id = id });
             if (result.Success)
                 return Ok(result);
             return BadRequest(result);
         }
 
         [HttpPost]
-        [Authorize(Policy = "User.Create")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
-            command.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            command.CreateBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var result = await _mediator.Send(command);
             if (result.Success)
@@ -46,6 +58,8 @@ namespace billgenixselfcare_api.API.Controllers
             if (id != command.Id)
                 return BadRequest("ID mismatch");
 
+            command.UpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var result = await _mediator.Send(command);
             if (result.Success)
                 return Ok(result);
@@ -55,7 +69,7 @@ namespace billgenixselfcare_api.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _mediator.Send(new DeleteUserCommand { Id = id, UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+            var result = await _mediator.Send(new DeleteUserCommand { Id = id, DeleteBy = User.FindFirstValue(ClaimTypes.NameIdentifier) });
             if (result.Success)
                 return Ok(result);
             return BadRequest(result);

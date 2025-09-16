@@ -8,7 +8,7 @@ namespace billgenixselfcare_api.Application.Features.Users
     public class DeleteUserCommand : IRequest<Result>
     {
         public string Id { get; set; }
-        public string UserId { get; set; }
+        public string DeleteBy { get; set; }
     }
 
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result>
@@ -29,10 +29,14 @@ namespace billgenixselfcare_api.Application.Features.Users
                 {
                     return Result.FailureResult("Not found");
                 }
+                if (request.Id == request.DeleteBy)
+                {
+                    return Result.FailureResult("You cannot delete your own account");
+                }
 
-                data.IsActive = false;
+                //data.IsActive = false;
                 data.IsDeleted = true;
-                data.DeletedBy = request.UserId;
+                data.DeletedBy = request.DeleteBy;
                 data.DateledAt = DateTime.UtcNow;
                 await _userManager.UpdateAsync(data);
 

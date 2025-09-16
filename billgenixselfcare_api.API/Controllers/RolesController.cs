@@ -17,7 +17,7 @@ namespace billgenixselfcare_api.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? search, int? pageNumber, int? pageSize = 2)
+        public async Task<IActionResult> GetAll(string? search, int? pageNumber, int? pageSize)
         {
             var result = await _mediator.Send(new GetAllRolesQuery
             {
@@ -25,6 +25,15 @@ namespace billgenixselfcare_api.API.Controllers
                 PageNumber = pageNumber,
                 PageSize = pageSize
             });
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetSelectListRoles")]
+        public async Task<IActionResult> GetSelectListRoles()
+        {
+            var result = await _mediator.Send(new GetSelectListRolesQuery());
             if (result.Success)
                 return Ok(result);
             return BadRequest(result);

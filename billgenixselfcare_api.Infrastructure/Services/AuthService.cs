@@ -30,10 +30,10 @@ namespace billgenixselfcare_api.Infrastructure.Services
                 return Result<AuthResponseDto>.FailureResult("Invalid email or password");
             }
 
-            if (!user.IsActive)
-            {
-                return Result<AuthResponseDto>.FailureResult("Account is deactivated");
-            }
+            //if (!user.IsActive)
+            //{
+            //    return Result<AuthResponseDto>.FailureResult("Account is deactivated");
+            //}
 
             var token = await GenerateTokenAsync(user);
             var userDto = await MapToUserDto(user);
